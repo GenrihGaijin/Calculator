@@ -1,0 +1,105 @@
+import java.util.Scanner;
+
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input;
+        System.out.println("Введите выражение Арабскими или Римскими цифрами от 1 до 10");
+        input = sc.nextLine();
+        System.out.println(Main.calc(input));
+    }
+
+    public static String calc(String input) {
+        String[] actions = {"+", "-", "/", "*"};
+        int actionIndex = -1;
+        for (int i = 0; i < actions.length; i++) {
+            if (input.contains(actions[i])) {
+                actionIndex = i;
+                break;
+            }
+        }
+        String[] num = input.split("[+\\-/*/]");
+        int a = 0;
+        int b = 0;
+        int res = 0;
+        boolean thisIsRoman = false;
+
+        if (num.length == 2) {
+            if (Roman.isRoman(num[0]) && Roman.isRoman(num[1])) {
+                a = Roman.romanToArabian(num[0]);
+                b = Roman.romanToArabian(num[1]);
+                thisIsRoman = true;
+            } else if (!Roman.isRoman(num[0]) && !Roman.isRoman(num[1])) {
+                a = Integer.parseInt(num[0]);
+                b = Integer.parseInt(num[1]);
+            }
+            if (a < 1 || a > 10 || b < 1 || b > 10) {
+                System.out.println("Введены неверные числа");
+            } else {
+                switch (actions[actionIndex]) {
+                    case "+":
+                        res = a + b;
+                        break;
+                    case "-":
+                        res = a - b;
+                        break;
+                    case "*":
+                        res = a * b;
+                        break;
+                    case "/":
+                        res = a / b;
+                        break;
+                }
+                if (thisIsRoman) {
+                    if (res > 0) {
+                        return Roman.convertToRoman(res);
+                    } else {
+
+                        return "Римские числа не могут быть отрицательными";
+                    }
+                } else {
+                    String fin = Integer.toString(res);
+                    return fin;
+                }
+            }
+        }
+    else {
+
+    return "Введено неверное выражение";
+    }
+    return "Ошибка";
+    }
+
+
+
+
+      class Roman       {
+     String number = "";
+    static String [] roman = new String[]{"0", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI",
+    "XVII", "XVIII", "XIX", "XX", "XXI", "XXII", "XXIII", "XXIV", "XXV", "XXVI", "XXVII", "XXVIII", "XXIX", "XXX", "XXXI", "XXXII",
+     "XXXIII", "XXXIV", "XXXV", "XXXVI", "XXXVII", "XXXVIII", "XXXIX", "XL", "XLI", "XLII", "XLIII", "XLIV", "XLV", "XLVI", "XLVII",
+            "XLVIII", "XLIX", "L", "LI", "LII","LIII", "LIV", "LV", "LVI", "LVII", "LVIII", "LVIX", "LX", "LXI", "LXII", "LXIII", "LXIV", "LXV", "LXVI", "LXVII",
+            "LXVIII", "LXIX", "LXX", "LXXI", "LXXII", "LXXIII", "LXXIV", "LXXV", "LXXVI", "LXXVII", "LXXVIII", "LXXIX", "LXXX", "LXXXI", "LXXXII",
+            "LXXXIII", "LXXXIV", "LXXXV", "LXXXVI", "LXXXVII", "LXXXVIII", "LXXXIX", "XC", "XCI", "XCII", "XCIII", "XCIV", "XCV", "XCVI",
+            "XCVII", "XCVIII", "XCIX","C"};
+        public static boolean isRoman(String number) {
+             for (int i = 0; i < roman.length; i++) {
+            if (number.equals(roman[i])) {
+                return true;
+            }
+            }
+             return false;
+            }
+         public static int romanToArabian(String number){
+             for (int i = 0; i < roman.length; i++) {
+                 if (number.equals(roman[i])) {
+                     return i;
+                 }
+             }
+             return -1;
+         }
+          public static String convertToRoman(int ar){
+            return roman[ar];}
+    }}
+
