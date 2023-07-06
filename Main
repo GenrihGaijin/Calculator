@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 
@@ -9,7 +10,6 @@ public class Main {
         input = sc.nextLine();
         System.out.println(Main.calc(input));
     }
-
     public static String calc(String input) {
         String[] actions = {"+", "-", "/", "*"};
         int actionIndex = -1;
@@ -19,24 +19,33 @@ public class Main {
                 break;
             }
         }
+        if (actionIndex == -1) {
+            try {
+                throw new IOException();
+            } catch (IOException t) {
+                return "Cтрока не является математической операцией";
+            }
+        }
         String[] num = input.split("[+\\-/*/]");
         int a = 0;
         int b = 0;
         int res = 0;
         boolean thisIsRoman = false;
+        if (num.length == 2 && num[0] != "") {
 
-        if (num.length == 2) {
-            if (Roman.isRoman(num[0]) && Roman.isRoman(num[1])) {
-                a = Roman.romanToArabian(num[0]);
-                b = Roman.romanToArabian(num[1]);
-                thisIsRoman = true;
-            } else if (!Roman.isRoman(num[0]) && !Roman.isRoman(num[1])) {
-                a = Integer.parseInt(num[0]);
-                b = Integer.parseInt(num[1]);
+            try {
+                if (Roman.isRoman(num[0]) && Roman.isRoman(num[1])) {
+                    a = Roman.romanToArabian(num[0]);
+                    b = Roman.romanToArabian(num[1]);
+                    thisIsRoman = true;
+                } else {
+                    a = Integer.parseInt(num[0]);
+                    b = Integer.parseInt(num[1]);
+                }
+            } catch (Exception e) {
+                return "Используются одновременно разные системы счисления";
             }
-            if (a < 1 || a > 10 || b < 1 || b > 10) {
-                System.out.println("Введены неверные числа");
-            } else {
+            if (a > 0 && a < 10 && b > 0 && b < 10) {
                 switch (actions[actionIndex]) {
                     case "+":
                         res = a + b;
@@ -51,27 +60,30 @@ public class Main {
                         res = a / b;
                         break;
                 }
-                if (thisIsRoman) {
-                    if (res > 0) {
-                        return Roman.convertToRoman(res);
-                    } else {
 
-                        return "Римские числа не могут быть отрицательными";
-                    }
-                } else {
-                    String fin = Integer.toString(res);
-                    return fin;
+            } else {
+                try {
+                    throw new IOException();
+                } catch (IOException e) {
+                    return "Введенные числа не в допустимом диапазоне";
+                }
+            }
+            if (thisIsRoman) {
+                try {
+                    return Roman.convertToRoman(res);
+                } catch (Exception d) {
+                    return "Римские числа не могут быть отрицательными";
                 }
             }
         }
-    else {
-
-    return "Введено неверное выражение";
-    }
-    return "Ошибка";
-    }
-
-
+        else { try {
+                throw new IOException();
+            } catch (IOException t) {
+                return "Формат математической операции не удовлетворяет заданию - два операнда и один оператор (+, -, /, *)";
+            }}
+        String fin = Integer.toString(res);
+        return fin;
+    }}
 
 
       class Roman       {
@@ -101,5 +113,5 @@ public class Main {
          }
           public static String convertToRoman(int ar){
             return roman[ar];}
-    }}
+    }
 
